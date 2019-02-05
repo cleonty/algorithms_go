@@ -1,12 +1,15 @@
-package linked_list
+package linkedlist
 
 import (
 	"fmt"
 )
 
+type Comparator func(a, b interface{}) bool
+
 type List struct {
 	head  *Node
 	count int
+	comp  Comparator
 }
 
 type Node struct {
@@ -22,26 +25,31 @@ func (list *List) IsEmpty() bool {
 	return list.count == 0
 }
 
-func (list *List) AddHead(value interface{}) {
-	list.head = &Node{
-		value: value,
-		next:  list.head,
-	}
-}
-
-func (list *List) AddTail(value interface{}) {
+func (list *List) Insert(value interface{}) {
 	node := &Node{
 		value: value,
 		next:  nil,
 	}
+	list.count++
 	if list.head == nil {
 		list.head = node
 		return
 	}
-	var n *Node
-	for n = list.head; n.next != nil; n = n.next {
+	var cur, prev *Node
+	for cur = list.head; cur != nil; cur = cur.next {
+		if list.comp(value, cur.value) {
+			if prev != nil {
+				prev.next = node
+				node.next = cur
+				return
+			}
+			node.next = list.head
+			list.head = node
+			return
+		}
+		prev = cur
 	}
-	n.next = node
+	prev.next = node
 }
 
 func (list *List) Print() {
@@ -56,6 +64,10 @@ func (list *List) Print() {
 	}
 }
 
-func New() *List {
-	return &List{}
+func New(comp Comparator) *List {
+	return &List{
+		head:  nil,
+		count: 0,
+		comp:  comp,
+	}
 }
