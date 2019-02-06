@@ -44,6 +44,26 @@ func (list *List) AddTail(value interface{}) {
 	n.next = node
 }
 
+func (list *List) Delete(value interface{}) bool {
+	var prev *Node
+	deleted := false
+	for cur := list.head; cur != nil; cur = cur.next {
+		if cur.value == value {
+			if prev == nil {
+				list.head = nil
+				list.count = 0
+				deleted = true
+				break
+			}
+			prev.next = cur.next
+			list.count--
+			deleted = true
+		}
+		prev = cur
+	}
+	return deleted
+}
+
 func (list *List) Print() {
 	first := true
 	for node := list.head; node != nil; node = node.next {
