@@ -50,8 +50,8 @@ func (list *List) Delete(value interface{}) bool {
 	for cur := list.head; cur != nil; cur = cur.next {
 		if cur.value == value {
 			if prev == nil {
-				list.head = nil
-				list.count = 0
+				list.head = cur.next
+				list.count--
 				deleted = true
 				break
 			}
@@ -62,6 +62,27 @@ func (list *List) Delete(value interface{}) bool {
 		prev = cur
 	}
 	return deleted
+}
+
+func (list *List) DeleteAll(value interface{}) int {
+	var prev *Node
+	deletedCount := 0
+	for cur := list.head; cur != nil; cur = cur.next {
+		if cur.value == value {
+			if prev == nil {
+				list.head = cur.next
+				list.count--
+				deletedCount++
+			} else {
+				prev.next = cur.next
+				list.count--
+				deletedCount++
+			}
+			continue
+		}
+		prev = cur
+	}
+	return deletedCount
 }
 
 func (list *List) Print() {
