@@ -1,27 +1,33 @@
-package linked_list
+// linkedlist package contains implementation of a singly linked list.
+package linkedlist
 
 import (
 	"fmt"
 )
 
+// List is singly linked list
 type List struct {
 	head  *Node
 	count int
 }
 
+// Node represents a single element of the list
 type Node struct {
 	value interface{}
 	next  *Node
 }
 
+// Size returns number of elements in the list
 func (list *List) Size() int {
 	return list.count
 }
 
+// IsEmpty checks whether the list is empty
 func (list *List) IsEmpty() bool {
 	return list.count == 0
 }
 
+// AddHead inserts value into the head of the list
 func (list *List) AddHead(value interface{}) {
 	list.head = &Node{
 		value: value,
@@ -29,6 +35,7 @@ func (list *List) AddHead(value interface{}) {
 	}
 }
 
+// AddTail inserts value into the tail of the list
 func (list *List) AddTail(value interface{}) {
 	node := &Node{
 		value: value,
@@ -44,6 +51,7 @@ func (list *List) AddTail(value interface{}) {
 	n.next = node
 }
 
+// Delete deletes a first occurrence of value
 func (list *List) Delete(value interface{}) bool {
 	var prev *Node
 	deleted := false
@@ -64,6 +72,7 @@ func (list *List) Delete(value interface{}) bool {
 	return deleted
 }
 
+// DeleteAll deletes all occurrences of value and returns number of deleted elements
 func (list *List) DeleteAll(value interface{}) int {
 	var prev *Node
 	deletedCount := 0
@@ -85,6 +94,20 @@ func (list *List) DeleteAll(value interface{}) int {
 	return deletedCount
 }
 
+// Reverse reverses a list
+func (list *List) Reverse() {
+	var cur *Node
+	var prev *Node
+	for cur = list.head; cur != nil; {
+		next := cur.next
+		cur.next = prev
+		prev = cur
+		cur = next
+	}
+	list.head = prev
+}
+
+// Print prints a list into stdout
 func (list *List) Print() {
 	first := true
 	for node := list.head; node != nil; node = node.next {
@@ -97,6 +120,7 @@ func (list *List) Print() {
 	}
 }
 
+// New creates a new List
 func New() *List {
 	return &List{}
 }
